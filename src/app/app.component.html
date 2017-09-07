@@ -1,1 +1,35 @@
 <h1>CryptoComparator</h1>
+<table>
+  <tr>
+    <th>Moneda</th>
+    <th>Valor de Compra</th>
+    <th>Valor Actual</th>
+    <th>Diferencia (€)</th>
+    <th>Diferencia (BTC)</th>
+    <th>Porcentaje</th>
+  </tr>
+  <tr>
+    <td>QTUM</td>
+    <td>{{QTUMWallet.BuyPrice}}</td>
+    <td>{{QTUMValue.BTC}}</td>
+    <td>~{{QTUMWallet.Difference*BTCValue.EUR | number:'1.0-3'}}€ </td>
+    <td>{{QTUMWallet.Difference | number:'1.0-7'}}BTC</td>
+    <td>{{QTUMWallet.Percentage | number:'1.0-2'}} %</td>
+  </tr>
+  <tr>
+    <td>OMG</td>
+    <td>{{OMGWallet.BuyPrice}}</td>
+    <td>{{OMGValue.BTC}}</td>
+    <td>~{{OMGWallet.Difference*BTCValue.EUR | number:'1.0-3'}}€ </td>
+    <td>{{OMGWallet.Difference | number:'1.0-7'}}BTC</td>
+    <td>{{OMGWallet.Percentage | number:'1.0-2'}} %</td>
+  </tr>
+  <tr>
+    <td>ETH</td>
+    <td>{{ETHWallet.BuyPrice}}</td>
+    <td>{{ETHValue.EUR}}</td>
+    <td>{{ETHWallet.Difference | number:'1.0-7'}}€</td>
+    <td></td>
+    <td>{{ETHWallet.Percentage | number:'1.0-2'}} %</td>
+  </tr>
+</table>
