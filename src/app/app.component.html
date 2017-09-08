@@ -2,7 +2,7 @@
   <h2>Mi portfolio de criptomonedas:</h2>
   <br/>
   <br/>
-  <table class="table table-striped table-bordered">
+  <table *ngIf="QTUMWallet && OMGWallet && ETHWallet" class="table table-striped table-bordered">
     <tr>
       <th>Moneda</th>
       <th>Valor de Compra</th>
@@ -10,30 +10,46 @@
       <th>Diferencia (€)</th>
       <th>Diferencia (BTC)</th>
       <th>Porcentaje</th>
+      <th>Valor Real</th>
     </tr>
-    <tr>
+
+    <tr *ngFor="let buyOperation of QTUMWallet.BuyOperations">
       <td>QTUM</td>
-      <td>{{QTUMWallet.BuyPrice}}</td>
-      <td>{{QTUMValue.BTC}}</td>
-      <td>~{{QTUMWallet.Difference*BTCValue.EUR | number:'1.0-3'}}€ </td>
-      <td>{{QTUMWallet.Difference | number:'1.0-7'}}BTC</td>
-      <td>{{QTUMWallet.Percentage | number:'1.0-2'}} %</td>
+      <td>{{buyOperation.BuyPrice}}</td>
+      <td>{{QTUMWallet.CurrentValue}}</td>
+      <td [ngClass]="{'positive': QTUMWallet.hasBenefits(buyOperation), 'negative': !QTUMWallet.hasBenefits(buyOperation)}">{{QTUMWallet.getDifference(buyOperation)*BTCValue.EUR | number:'1.0-3'}}€</td>
+      <td>{{QTUMWallet.getDifference(buyOperation) | number:'1.0-7'}}BTC</td>
+      <td>{{QTUMWallet.getPercentage(buyOperation) | number:'1.0-2'}} %</td>
+      <td>{{QTUMWallet.getActualValue(buyOperation)*BTCValue.EUR | number:'1.0-2'}}€</td>
     </tr>
-    <tr>
+
+    <tr *ngFor="let buyOperation of OMGWallet.BuyOperations">
       <td>OMG</td>
-      <td>{{OMGWallet.BuyPrice}}</td>
-      <td>{{OMGValue.BTC}}</td>
-      <td>~{{OMGWallet.Difference*BTCValue.EUR | number:'1.0-3'}}€ </td>
-      <td>{{OMGWallet.Difference | number:'1.0-7'}}BTC</td>
-      <td>{{OMGWallet.Percentage | number:'1.0-2'}} %</td>
+      <td>{{buyOperation.BuyPrice}}</td>
+      <td>{{OMGWallet.CurrentValue}}</td>
+      <td [ngClass]="{'positive': OMGWallet.hasBenefits(buyOperation), 'negative': !OMGWallet.hasBenefits(buyOperation)}">{{OMGWallet.getDifference(buyOperation)*BTCValue.EUR | number:'1.0-3'}}€</td>
+      <td>{{OMGWallet.getDifference(buyOperation) | number:'1.0-7'}}BTC</td>
+      <td>{{OMGWallet.getPercentage(buyOperation) | number:'1.0-2'}} %</td>
+      <td>{{OMGWallet.getActualValue(buyOperation)*BTCValue.EUR | number:'1.0-2'}}€</td>
+    </tr>
+
+    <tr *ngFor="let buyOperation of ETHWallet.BuyOperations">
+      <td>ETH</td>
+      <td>{{buyOperation.BuyPrice}}</td>
+      <td>{{ETHWallet.CurrentValue}}</td>
+      <td [ngClass]="{'positive': ETHWallet.hasBenefits(buyOperation), 'negative': !ETHWallet.hasBenefits(buyOperation)}">{{ETHWallet.getDifference(buyOperation) | number:'1.0-3'}}€</td>
+      <td></td>
+      <td>{{ETHWallet.getPercentage(buyOperation) | number:'1.0-2'}} %</td>
+      <td>{{ETHWallet.getActualValue(buyOperation) | number:'1.0-2'}}€</td>
     </tr>
     <tr>
-      <td>ETH</td>
-      <td>{{ETHWallet.BuyPrice}}</td>
-      <td>{{ETHValue.EUR}}</td>
-      <td>{{ETHWallet.Difference | number:'1.0-7'}}€</td>
+      <td>TOTAL</td>
       <td></td>
-      <td>{{ETHWallet.Percentage | number:'1.0-2'}} %</td>
+      <td></td>
+      <td [ngClass]="{'positive': hasBenefits(), 'negative': !hasBenefits()}">{{getTotalDifference() | number:'1.0-2'}}€</td>
+      <td></td>
+      <td></td>
+      <td>{{getTotalActualValue() | number:'1.0-2'}}€</td>
     </tr>
   </table>
 </div>

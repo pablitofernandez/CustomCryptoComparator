@@ -1,10 +1,10 @@
-export class OMGWallet {
-  BuyPrice = 0.00256253;
-  Difference: number;
-  Percentage: number;
+import {CryptoWallet} from './CryptoWallet';
+import {BuyOperation} from './BuyOperation';
+
+export class OMGWallet extends CryptoWallet {
 
   constructor(currentValue: number) {
-    this.Difference = currentValue - this.BuyPrice;
-    this.Percentage = (this.Difference / this.BuyPrice) * 100;
+    super(currentValue);
+    this.BuyOperations = [ new BuyOperation(0.00256252, 6.13707756) ];
   }
 }

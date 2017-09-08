@@ -7,6 +7,7 @@ import {BTCValue} from './Model/BTCValue';
 import {OMGWallet} from './Model/OMGWalllet';
 import {QTUMWallet} from './Model/QTUMWallet';
 import {ETHWallet} from './Model/ETHWallet';
+import {BuyOperation} from './Model/BuyOperation';
 
 @Component({
   selector: 'app-root',
@@ -19,27 +20,45 @@ export class AppComponent implements OnInit {
   }
 
   title = 'Mi portfolio de criptomonedas';
-  QTUMValue = new QTUMValue();
   OMGValue = new OMGValue();
   ETHValue = new ETHValue();
   BTCValue = new BTCValue();
   OMGWallet: OMGWallet;
   QTUMWallet: QTUMWallet;
   ETHWallet: ETHWallet;
+  TotalDifference = 0;
+  TotalActualValue = 0;
 
   ngOnInit(): void {
-    this.cryptoCompareAPIService.getQtumToBtc().then(value => {
-      this.QTUMValue = value;
-      this.QTUMWallet = new QTUMWallet(value.BTC);
+
+    this.cryptoCompareAPIService.getBtcToEur().then(value => {
+      this.BTCValue = value;
+
+      this.cryptoCompareAPIService.getQtumToBtc().then(qtumvalue => {
+        this.QTUMWallet = new QTUMWallet(qtumvalue.BTC);
+      });
+      this.cryptoCompareAPIService.getOmgToBtc().then(omgvalue => {
+        this.OMGValue = omgvalue;
+        this.OMGWallet = new OMGWallet(omgvalue.BTC);
+      });
+      this.cryptoCompareAPIService.getEthToEur().then(ethvalue => {
+        this.ETHValue = ethvalue;
+        this.ETHWallet = new ETHWallet(ethvalue.EUR);
+      });
     });
-    this.cryptoCompareAPIService.getOmgToBtc().then(value => {
-      this.OMGValue = value;
-      this.OMGWallet = new OMGWallet(value.BTC);
-    });
-    this.cryptoCompareAPIService.getEthToEur().then(value => {
-      this.ETHValue = value;
-      this.ETHWallet = new ETHWallet(value.EUR);
-    });
-    this.cryptoCompareAPIService.getBtcToEur().then(value => this.BTCValue = value);
+  }
+
+  getTotalDifference(): number {
+    return this.OMGWallet.getTotalDifference() * this.BTCValue.EUR +
+      this.QTUMWallet.getTotalDifference() * this.BTCValue.EUR + this.ETHWallet.getTotalDifference();
+  }
+
+  getTotalActualValue(): number {
+    return this.OMGWallet.getTotalActualValue() * this.BTCValue.EUR +
+      this.QTUMWallet.getTotalActualValue() * this.BTCValue.EUR + this.ETHWallet.getTotalActualValue();
+  }
+
+  hasBenefits(): boolean {
+    return this.getTotalDifference() > 0;
   }
 }
